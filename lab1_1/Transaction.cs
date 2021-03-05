@@ -5,7 +5,7 @@ using System.Text;
 
 namespace lab1_1
 {
-    public class Transaction
+    public class Transaction: BooleansBase
     {
         private static int InstanceCount;
         private int _id;
@@ -18,12 +18,57 @@ namespace lab1_1
 
         public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
         public int Id { get => _id; set => _id = value; }
-        public double Sum { get => _sum; set => _sum = value; }
-        public Category Category { get => _category; set => _category = value; }
-        public string Currency { get => _currency; set => _currency = value; }
-        public string Description { get => _description; set => _description = value; }
-        public DateTime Date { get => _date; set => _date = value; }
-        public FileStream File { get => _file; set => _file = value; }
+        public double Sum { 
+            get {
+                return  _sum; 
+            }
+            set { _sum = value; 
+                HasChanges = true;
+            } 
+        }
+        public Category Category { 
+            get { 
+                return _category; 
+            }
+            set { 
+                _category = value;
+                HasChanges = true;
+            } 
+        }
+        public string Currency { 
+            get { 
+                return _currency; 
+            }
+            set {
+                _currency = value;
+                HasChanges = true;
+            } 
+        }
+        public string Description { get { 
+                return _description; 
+            } 
+            set {
+                _description = value;
+                HasChanges = true;
+            }
+        }
+        public DateTime Date { 
+            get { 
+                return _date; 
+            }
+            set { _date = value;
+                HasChanges = true;
+            }
+        }
+        public FileStream File { get 
+            {
+                return _file;
+            } 
+            set { 
+                _file = value;
+                HasChanges = true;
+            } 
+        }
 
         public void DeleteTransaction()
         {
@@ -46,6 +91,11 @@ namespace lab1_1
         {
             _id = id;
             _sum = sum;
+            _category = category;
+            _currency = currency;
+            _description = description;
+            _date = date;
+            _file = file;
         }
     }
 }

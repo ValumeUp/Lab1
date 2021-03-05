@@ -17,13 +17,15 @@ public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = 
         public string Surname { get => _surname; set => _surname = value; }
         public string Email { get => _email; set => _email = value; }
         public int Id { get => _id; set => _id = value; }
+        public List<Card> Cards { get => _cards; set => _cards = value; }
+        public List<Category> Categories { get => _categories; set => _categories = value; }
 
         public User()
         {
             InstanceCount += 1;
             _id = InstanceCount;
-            _cards = new List<Card>();
-            _categories = new List<Category>();
+            Cards = new List<Card>();
+            Categories = new List<Category>();
         }
 
         public User(int id, string name, string surname, string email, List<Card> cards, List<Category> categories)
@@ -32,8 +34,28 @@ public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = 
             _name = name;
             _surname = surname;
             _email = email;
-            _cards = cards;
-            _categories = categories;
+            Cards = cards;
+            Categories = categories;
+        }
+
+        public bool Validate()
+        {
+            var result = true;
+
+            if (Id <= 0)
+                result = false;
+            if (String.IsNullOrWhiteSpace(Name))
+                result = false;
+            if (String.IsNullOrWhiteSpace(Surname))
+                result = false;
+            if (String.IsNullOrWhiteSpace(Email))
+                result = false;
+            return result;
+        }
+
+        public string Show()
+        {
+            return $"User {_id}: {_name}, {_surname}, Email: {_email}, Cards: {_cards}, on categories: {_categories}";
         }
     }
 }
