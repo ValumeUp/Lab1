@@ -46,6 +46,11 @@ namespace lab1_1
         {
             _id = id;
             _sum = sum;
+            _category = category;
+            _currency = currency;
+            _description = description;
+            _date = date;
+            _file = file;
         }
     }
 }
