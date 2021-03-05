@@ -15,7 +15,7 @@ namespace lab1_1
         private int _userId;
         private List<Category> _categories;
         private bool _isShared;
-
+        private List<Transaction> _transactions;
 
 
         public int Id
@@ -95,6 +95,10 @@ namespace lab1_1
             get => _categories;
             set => _categories = value;
         }
+        public List<Transaction> Transactions {
+            get => _transactions; 
+            set => _transactions = value; 
+        }
 
         public Wallet()
         {
@@ -129,10 +133,41 @@ namespace lab1_1
 
             return result;
         }
+
+        public void addTransaction(Transaction transaction)
+        {
+            _transactions.Add(transaction);
+        }
+
+        public void deleteTransaction(Transaction transaction)
+        {
+            _transactions.Remove(transaction);
+        }
+
         public double countBalance()
         {
-            foreach (Transaction transaction in )
+            var result = _initialBalance;
+            foreach (var transaction in Transactions)
+            {
+                result += transaction.Sum;
+            }
+            return result;
          }
+        public double countMonthTransactions()
+        {
+            var result = 0.0;
+            DateTime dt = DateTime.Now;
+            foreach (var transaction in Transactions)
+            {
+                if (transaction.Date > dt)
+                {
+                    result += transaction.Sum;
+                }
+            }
+            return result;
+
+        }
+        
 
     }
 }
