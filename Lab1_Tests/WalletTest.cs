@@ -20,5 +20,20 @@ namespace Lab1_Tests
                 //Assert
                 Assert.True(actual);
             }
+
+        [Fact]
+        public void CustomerCounterTest()
+        {
+            //Arrange
+            var wallet = new Wallet();
+            var wallet1 = new Wallet();
+            var wallet2 = new Wallet();
+
+            //Act            
+
+            //Assert
+            Assert.Equal(wallet1.Id, wallet.Id + 1);
+            Assert.Equal(wallet2.Id, wallet1.Id + 1);
         }
+    }
     }
