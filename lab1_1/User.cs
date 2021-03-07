@@ -10,25 +10,25 @@ namespace lab1_1
         private string _name;
         private string _surname;
         private string _email;
-        private List<Card> _cards;
+        private List<Wallet> _wallets;
         private List<Category> _categories;
 public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
         public string Name { get => _name; set => _name = value; }
         public string Surname { get => _surname; set => _surname = value; }
         public string Email { get => _email; set => _email = value; }
         public int Id { get => _id; set => _id = value; }
-        public List<Card> Cards { get => _cards; set => _cards = value; }
+        public List<Wallet> Cards { get => _wallets; set => _wallets = value; }
         public List<Category> Categories { get => _categories; set => _categories = value; }
 
         public User()
         {
             InstanceCount += 1;
             _id = InstanceCount;
-            Cards = new List<Card>();
+            Cards = new List<Wallet>();
             Categories = new List<Category>();
         }
 
-        public User(int id, string name, string surname, string email, List<Card> cards, List<Category> categories)
+        public User(int id, string name, string surname, string email, List<Wallet> cards, List<Category> categories)
         {
             _id = id;
             _name = name;
@@ -55,7 +55,7 @@ public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = 
 
         public string Show()
         {
-            return $"User {_id}: {_name}, {_surname}, Email: {_email}, Cards: {_cards}, on categories: {_categories}";
+            return $"User {_id}: {_name}, {_surname}, Email: {_email}, Wallets: {_wallets}, on categories: {_categories}";
         }
     }
 }

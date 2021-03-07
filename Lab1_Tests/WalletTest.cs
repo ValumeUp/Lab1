@@ -10,7 +10,7 @@ namespace Lab1_Tests
             public void Test1()
             {
                 //Arrange
-                var wallet = new Wallet { Name = "masha", Currency = "usd", InitialBalance = 200.0, Description = "ygjgg", UserId = 3 };
+                var wallet = new Wallet { Name = "masha", Currency = "usd", InitialBalance = 200, Description = "ygjgg", UserId = 3 };
 
 
           

@@ -9,7 +9,7 @@ namespace lab1_1
         private static int InstanceCount;
         private int _id;
         private string _name;
-        private double _initialBalance;
+        private decimal _initialBalance;
         private string _description;
         private string _currency;
         private int _userId;
@@ -40,7 +40,7 @@ namespace lab1_1
                 _name = value;
             }
         }
-        public double InitialBalance
+        public decimal InitialBalance
         {
             get
             {
@@ -106,7 +106,7 @@ namespace lab1_1
             InstanceCount += 1;
             _id = InstanceCount;
         }
-        public Wallet(int id, string name, double initialBalance, string description, string currency, int userId)
+        public Wallet(int id, string name, decimal initialBalance, string description, string currency, int userId)
         {
             _id = id;
             _name = name;
@@ -144,24 +144,26 @@ namespace lab1_1
             _transactions.Remove(transaction);
         }
 
-        public double countBalance()
+        public decimal countBalance()
         {
             var result = _initialBalance;
             foreach (var transaction in Transactions)
             {
-                result += transaction.Sum;
+                //result += transaction.Sum;
+                result = Decimal.Add(result, transaction.Sum);
             }
             return result;
          }
-        public double countMonthTransactions()
+        public decimal countMonthTransactions()
         {
-            var result = 0.0;
+            decimal result = 0;
             DateTime dt = DateTime.Now;
             foreach (var transaction in Transactions)
             {
                 if (transaction.Date > dt)
                 {
-                    result += transaction.Sum;
+                    result = Decimal.Add(result, transaction.Sum);
+                    //result += transaction.Sum;
                 }
             }
             return result;
