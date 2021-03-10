@@ -9,7 +9,7 @@ namespace lab1_1
     {
         private static int InstanceCount;
         private int _id;
-        private double _sum;
+        private decimal _sum;
         private Category _category;
         private string _currency;
         private string _description;
@@ -18,7 +18,7 @@ namespace lab1_1
 
         public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
         public int Id { get => _id; set => _id = value; }
-        public double Sum { 
+        public decimal Sum { 
             get {
                 return  _sum; 
             }
@@ -87,7 +87,7 @@ namespace lab1_1
             InstanceCount += 1;
             _id = InstanceCount;
         }
-        public Transaction(int id, double sum, Category category, string currency, string description, DateTime date, FileStream file)
+        public Transaction(int id, decimal sum, Category category, string currency, string description, DateTime date, FileStream file)
         {
             _id = id;
             _sum = sum;
