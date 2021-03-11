@@ -41,7 +41,7 @@ namespace Lab1_Tests
         public void TransactionCount()
         {
             //Arrange
-            var wallet = new Wallet { Name = "masha", Currency = "usd", InitialBalance = 200, Description = "ygjgg", UserId = 3 };
+            var wallet = new Wallet { Name = "masha", Currency = "usd", InitialBalance = 200, Description = "ygjgg", UserId = 3, IsShared = true };
             var category1 = new Category() { Name = "food", Color = "red", Description = "mmmmmm" };
             var category2 = new Category() { Name = "food", Color = "green", Description = "ccccc" };
             List < Category > categories = new List<Category>();

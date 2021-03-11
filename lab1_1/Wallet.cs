@@ -142,7 +142,7 @@ namespace lab1_1
             {
                 _transactions.Add(transaction);
             }
-            else if (transaction.UserId == _userId)
+            else if (transaction.UserId == this._userId)
             {
                 _transactions.Add(transaction);
             }
@@ -168,20 +168,7 @@ namespace lab1_1
             }
             return result;
          }
-        public decimal countMonthTransactions()
-        {
-            decimal result = 0;
-            DateTime dt = DateTime.Now;
-            foreach (var transaction in Transactions)
-            {
-                if (transaction.Date > dt && transaction.Sum>=0)
-                {
-                    result += transaction.Sum;
-                }
-            }
-            return result;
-
-        }
+      
         public decimal countMonthTransactionsPlus()
         {
             var result = 0.0m;
