@@ -128,7 +128,7 @@ namespace lab1_1
                 result = false;
             if (String.IsNullOrWhiteSpace(Currency))
                 result = false;
-            if (UserId == null)
+            if (UserId <= 0)
                 result = false;
 
             return result;
@@ -154,13 +154,27 @@ namespace lab1_1
             }
             return result;
          }
-        public decimal countMonthTransactions()
+        public double countMonthTransactions()
         {
             decimal result = 0;
             DateTime dt = DateTime.Now;
             foreach (var transaction in Transactions)
             {
-                if (transaction.Date > dt)
+                if (transaction.Date > dt && transaction.Sum>=0)
+                {
+                    result += transaction.Sum;
+                }
+            }
+            return result;
+
+        }
+        public double countMonthTransactionsMinus()
+        {
+            var result = 0.0;
+            DateTime dt = DateTime.Now;
+            foreach (var transaction in Transactions)
+            {
+                if (transaction.Date > dt && transaction.Sum<0)
                 {
                     result = Decimal.Add(result, transaction.Sum);
                     //result += transaction.Sum;
@@ -169,7 +183,23 @@ namespace lab1_1
             return result;
 
         }
-        
+
+        public string showMonthIncome()
+        {
+            double result = this.countMonthTransactionsPlus();
+            return $"Month Income: {result} { _currency}";
+        }
+
+        public string showMonthCosts()
+        {
+            double result = this.countMonthTransactionsMinus() * -1;
+            return $"Month costs: {result} { _currency}";
+        }
+        public string Show()
+        {
+            return $"Wallet: {_id}, Name: {_name}, initial balance: {_initialBalance}, description: {_description}, currency: {_currency}, user id: {_userId}";
+        }
+
 
     }
 }
