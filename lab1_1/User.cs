@@ -55,7 +55,9 @@ public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = 
 
         public string Show()
         {
-            return $"User {_id}: {_name}, {_surname}, Email: {_email}, Wallets: {_wallets}, on categories: {_categories}";
+            return $"User {_id}: {_name}, {_surname}, Email: {_email}";
         }
     }
+//    , Wallets: {_wallets
+//}, on categories: { _categories}
 }
