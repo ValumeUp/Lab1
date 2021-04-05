@@ -15,6 +15,8 @@ namespace lab1_1
         private string _description;
         private DateTime _date;
         private FileStream _file;
+        private int _userId;
+
 
         public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
         public int Id { get => _id; set => _id = value; }
@@ -68,6 +70,18 @@ namespace lab1_1
                 _file = value;
                 HasChanges = true;
             } 
+        }
+
+        public int UserId {
+            get
+            {
+               return _userId;
+            }
+            set
+            {
+                _userId = value;
+                HasChanges = true;
+            }
         }
 
         public void DeleteTransaction()
