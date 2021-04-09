@@ -103,11 +103,10 @@ namespace lab1_1
         public Wallet()
         {
             Categories = new List<Category>();
-            Transactions = new List<Transaction>();
             InstanceCount += 1;
             _id = InstanceCount;
         }
-        public Wallet(int id, string name, decimal initialBalance, string description, string currency, int userId, List<Category> categories)
+        public Wallet(int id, string name, decimal initialBalance, string description, string currency, int userId)
         {
             _id = id;
             _name = name;
@@ -115,7 +114,6 @@ namespace lab1_1
             _description = description;
             _currency = currency;
             _userId = userId;
-            _categories = categories;
         }
 
         public bool Validate()
@@ -138,19 +136,7 @@ namespace lab1_1
 
         public void addTransaction(Transaction transaction)
         {
-            if (_isShared == true)
-            {
-                _transactions.Add(transaction);
-            }
-            else if (transaction.UserId == this._userId)
-            {
-                _transactions.Add(transaction);
-            }
-            else
-            {
-                throw new Exception("this wallet can't be shared");
-            }
-            
+            _transactions.Add(transaction);
         }
 
         public void deleteTransaction(Transaction transaction)
@@ -168,20 +154,15 @@ namespace lab1_1
             }
             return result;
          }
-      
-        public decimal countMonthTransactionsPlus()
+        public decimal countMonthTransactions()
         {
-            var result = 0.0m;
+            decimal result = 0;
             DateTime dt = DateTime.Now;
-            int monthNow = dt.Month;
             foreach (var transaction in Transactions)
             {
-                DateTime tr = transaction.Date;
-                int transactionMonth = tr.Month;
-                if (monthNow == transactionMonth && transaction.Sum > 0)
+                if (transaction.Date > dt && transaction.Sum>=0)
                 {
-                    result = Decimal.Add(result, transaction.Sum);
-                    //result += transaction.Sum;
+                    result += transaction.Sum;
                 }
             }
             return result;
@@ -189,14 +170,11 @@ namespace lab1_1
         }
         public decimal countMonthTransactionsMinus()
         {
-            var result = 0.0m;
+            decimal result = 0;
             DateTime dt = DateTime.Now;
-            int monthNow = dt.Month;
             foreach (var transaction in Transactions)
             {
-                DateTime tr = transaction.Date;
-                int transactionMonth = tr.Month;
-                if (monthNow == transactionMonth && transaction.Sum<0)
+                if (transaction.Date > dt && transaction.Sum<0)
                 {
                     result = Decimal.Add(result, transaction.Sum);
                     //result += transaction.Sum;
@@ -208,13 +186,13 @@ namespace lab1_1
 
         public string showMonthIncome()
         {
-           var result = this.countMonthTransactionsPlus();
+            decimal result = this.countMonthTransactionsPlus();
             return $"Month Income: {result} { _currency}";
         }
 
         public string showMonthCosts()
         {
-            var result = this.countMonthTransactionsMinus() * -1;
+            decimal result = this.countMonthTransactionsMinus() * -1;
             return $"Month costs: {result} { _currency}";
         }
         public string Show()

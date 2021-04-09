@@ -7,11 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\backgroung.png" />
+    <None Remove="base.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\backgroung.png" />
+    <PackageReference Include="Prism.Core" Version="8.0.0.1909" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="base.png" />
   </ItemGroup>
 
 </Project>

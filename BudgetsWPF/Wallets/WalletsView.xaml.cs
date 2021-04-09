@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace WpfAccount
+namespace BudgetsWPF.Wallets
 {
     /// <summary>
-    /// Interaction logic for LoginPage.xaml
+    /// Interaction logic for WalletsView.xaml
     /// </summary>
-    public partial class LoginPage : UserControl
+    public partial class WalletsView : UserControl
     {
-        public LoginPage()
+        public WalletsView()
         {
             InitializeComponent();
         }

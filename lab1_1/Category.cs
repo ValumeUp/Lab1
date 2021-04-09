@@ -86,8 +86,8 @@ namespace lab1_1
                 result = false;
             if (String.IsNullOrWhiteSpace(Color))
                 result = false;
-         //   if (Icon == null)
-          //      result = false;
+            if (Icon == null)
+                result = false;
 
             return result;
         }
