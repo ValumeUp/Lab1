@@ -1,4 +1,4 @@
-﻿namespace BudgetsWPF
+﻿namespace Models.Users
 {
     public class AuthenticationUser
     {

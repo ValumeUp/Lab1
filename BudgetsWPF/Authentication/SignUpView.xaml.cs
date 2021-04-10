@@ -9,19 +9,17 @@ namespace BudgetsWPF.Authentication
     /// </summary>
     public partial class SignUpView : UserControl
     {
-        private SignUpViewModel _viewModel;
-        public SignUpView( Action goToSignIn)
+
+        public SignUpView()
         {
-            _viewModel = new SignUpViewModel(goToSignIn);
+
             InitializeComponent();
-            this.DataContext = _viewModel;
-           
         }
 
 
         private void TbPassword_OnPasswordChanged(object sender, RoutedEventArgs e)
         {
-            _viewModel.Password = TbPassword.Password;
+            ((SignUpViewModel)DataContext).Password = TbPassword.Password;
         }
     }
 }

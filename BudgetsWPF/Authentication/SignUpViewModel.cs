@@ -1,16 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using BudgetsWPF.Navigation;
+using Models.Users;
 using Prism.Commands;
+using Services;
 
 namespace BudgetsWPF.Authentication
 {
-    public class SignUpViewModel:INotifyPropertyChanged
+    public class SignUpViewModel:INotifyPropertyChanged, INavigatable<AuthNavTypes>
     {
         private RegistrationUser _regUser= new RegistrationUser();
         private Action _goToSignIn;
+        public AuthNavTypes Type
+        {
+            get
+            {
+                return AuthNavTypes.SignUp;
+            }
+        }
+
+
         public SignUpViewModel(Action goToSignIn)
         {
             SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnable);
@@ -24,7 +35,7 @@ namespace BudgetsWPF.Authentication
             return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(LastName);
         }
 
-        private void SignUp()
+        private async void SignUp()
         {
 
 
@@ -32,7 +43,7 @@ namespace BudgetsWPF.Authentication
             var authService = new AuthenticationService();
                 try
                 {
-                     authService.RegisterUser(_regUser);
+                     await authService.RegisterUser(_regUser);
                 }
                 catch (Exception ex)
                 {
@@ -93,6 +104,10 @@ namespace BudgetsWPF.Authentication
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+        public void ClearSensitiveData()
+        {
+            _regUser = new RegistrationUser();
         }
     }
 }

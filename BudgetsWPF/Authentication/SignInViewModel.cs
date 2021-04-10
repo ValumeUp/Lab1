@@ -2,16 +2,46 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
+using BudgetsWPF.Navigation;
+using Models.Users;
 using Prism.Commands;
+using Services;
 
 namespace BudgetsWPF.Authentication
 {
-    public class SignInViewModel:INotifyPropertyChanged
+    public class SignInViewModel:INotifyPropertyChanged, INavigatable<AuthNavTypes>
     {
         private AuthenticationUser _authUser= new AuthenticationUser();
         private Action _goToSignUp;
         private Action _goToWallets;
+        private bool _isEnabled=true;
+
+        public bool IsEnabled
+        {
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
+        }
+
+       
+
+        public AuthNavTypes Type
+        {
+            get
+            {
+                return AuthNavTypes.SignIn;
+            }
+        }
+
 
         public SignInViewModel(Action goToSighUp, Action goToWallets)
         {
@@ -27,8 +57,9 @@ namespace BudgetsWPF.Authentication
             return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password);
         }
 
-        private void SignIn()
+        private async void SignIn()
         {
+            
             if (String.IsNullOrWhiteSpace(Login) || String.IsNullOrWhiteSpace(Password))
                 MessageBox.Show("Login or password is empty");
             else
@@ -38,12 +69,17 @@ namespace BudgetsWPF.Authentication
                 User user = null;
                 try
                 {
-                    user = authService.Authenticate(_authUser);
+                    IsEnabled = false;
+                    user = await authService.Authenticate(_authUser);
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show($"Fail: {ex.Message}");
                     return;
+                }
+                finally
+                {
+                    IsEnabled = true;
                 }
                 MessageBox.Show($"Successful for user {user.FirstName} {user.LastName}");
                 _goToWallets.Invoke();
@@ -80,17 +116,17 @@ namespace BudgetsWPF.Authentication
         public DelegateCommand SignInCommand{ get; }
         public DelegateCommand SignUpCommand { get; }
         public DelegateCommand CloseCommand { get; }
-        //public AuthenticationUser AuthUser
-        //{
-        //    get => _authUser;
-        //    set => _authUser = value;
-
-        //}
+        
         public event PropertyChangedEventHandler? PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public void ClearSensitiveData()
+        {
+            Password = "";
         }
     }
 }

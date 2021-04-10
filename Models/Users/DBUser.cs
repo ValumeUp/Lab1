@@ -1,8 +1,9 @@
 ﻿using System;
+using DataStorage;
 
-namespace BudgetsWPF
+namespace Models.Users
 {
-    public class DBUser
+    public class DBUser:IStorable
     {
         public DBUser(string firstName, string lastName, string email, string login, string password)
         {
