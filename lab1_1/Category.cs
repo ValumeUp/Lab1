@@ -38,7 +38,7 @@ namespace lab1_1
             _image = image;
         }
 
-        public bool Validate()
+        public override bool Validate()
         {
             var result = true;
 
