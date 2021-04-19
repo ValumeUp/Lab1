@@ -1,95 +1,54 @@
-﻿using System;
+﻿using DataStorage;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Drawing;
+using DataStorage;
 
 namespace lab1_1
 {
-    public class Category
+    public class Category : EntityBase, IStorable
     {
-        private static int InstanceCount;
-        private int _id;
+
+
+        private Guid _guid;
         private string _name;
         private string _description;
-        private string _color;
-        private FileStream _icon;
+        private ColorWrapper _colorWrapper;
+        private System.Drawing.Icon _image;
+        private Guid _userGuid;
 
-        public int Id
-        {
-            get
-            {
-                return _id;
-            }
-            private set
-            {
-                _id = value;
-            }
-        }
-        public string Name
-        {
-            get
-            {
-                return _name;
-            }
-            set
-            {
-                _name = value;
-            }
-        }
-        public string Color
-        {
-            get
-            {
-                return _color;
-            }
-            set
-            {
-                _color = value;
-            }
-        }
-        public FileStream Icon
-        {
-            get
-            {
-                return _icon;
-            }
-            set
-            {
-                _icon = value;
-            }
-        }
 
+        public Guid Guid { get => _guid; private set => _guid = value; }
+        public string Name { get => _name; set => _name = value; }
         public string Description { get => _description; set => _description = value; }
+        public Guid UserGuid { get => _userGuid; private set => _userGuid = value; }
 
-        public Category()
+        public ColorWrapper ColorWrapper { get => _colorWrapper; set => _colorWrapper = value; }
+        public Icon Image { get => _image; set => _image = value; }
+
+        public Category(Guid userGuid, string name, string description, ColorWrapper colorWrapper, Icon image, Guid guid)
         {
-            InstanceCount += 1;
-            _id = InstanceCount;
-        }
-        public Category(int id, string name, string color, FileStream icon)
-        {
-            _id = id;
+            _guid = guid;
+            _userGuid = userGuid;
             _name = name;
-            _color = color;
-            _icon = icon;
+            _description = description;
+            _colorWrapper = colorWrapper;
+            _image = image;
         }
 
         public bool Validate()
         {
             var result = true;
 
-            if (Id <= 0)
+            if (UserGuid == Guid.Empty)
                 result = false;
             if (String.IsNullOrWhiteSpace(Name))
-                result = false;
-            if (String.IsNullOrWhiteSpace(Description))
-                result = false;
-            if (String.IsNullOrWhiteSpace(Color))
-                result = false;
-            if (Icon == null)
                 result = false;
 
             return result;
         }
+
     }
 }
