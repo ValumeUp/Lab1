@@ -1,63 +1,120 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace lab1_1
 {
-    public class User
+    public class User: EntityBase
     {
-        private static int InstanceCount;
-        private int _id;
-        private string _name;
-        private string _surname;
+        private Guid _guid;
+        private string _firstName;
+        private string _lastName;
         private string _email;
         private List<Wallet> _wallets;
         private List<Category> _categories;
-public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
-        public string Name { get => _name; set => _name = value; }
-        public string Surname { get => _surname; set => _surname = value; }
+        private List<Wallet> _walletsCoOwnered;
+        private string _login;
+
+        public Guid Guid { get => _guid; private set => _guid = value; }
+        public string FirstName { get => _firstName; set => _firstName = value; }
+        public string LastName { get => _lastName; set => _lastName = value; }
         public string Email { get => _email; set => _email = value; }
-        public int Id { get => _id; set => _id = value; }
-        public List<Wallet> Cards { get => _wallets; set => _wallets = value; }
-        public List<Category> Categories { get => _categories; set => _categories = value; }
+        public string Login { get => _login; set => _login = value; }
+        public List<Wallet> Wallets { get => _wallets; }
+        public List<Category> Categories { get => _categories;  }
+
+        public List<Wallet> WalletsCoOwnered { get => _walletsCoOwnered; }
 
         public User()
         {
-            InstanceCount += 1;
-            _id = InstanceCount;
-            Cards = new List<Wallet>();
-            Categories = new List<Category>();
+            
+            _wallets = new List<Wallet>();
+            _categories = new List<Category>();
+            _walletsCoOwnered = new List<Wallet>();
         }
 
-        public User(int id, string name, string surname, string email, List<Wallet> cards, List<Category> categories)
+        public User(Guid guid, string lastName, string firstName, string email, string login):this()
         {
-            _id = id;
-            _name = name;
-            _surname = surname;
+            _guid = guid;
+            _lastName = lastName;
+            _firstName = firstName;
             _email = email;
-            Cards = cards;
-            Categories = categories;
+            _login = login;
         }
-
+        public string FullName
+        {
+            get
+            {
+                var result = LastName;
+                if (!String.IsNullOrWhiteSpace(FirstName))
+                {
+                    if (!String.IsNullOrWhiteSpace(LastName))
+                    {
+                        result += ", ";
+                    }
+                    result += FirstName;
+                }
+                return result;
+            }
+        }
         public bool Validate()
         {
             var result = true;
 
-            if (Id <= 0)
+            if (String.IsNullOrWhiteSpace(LastName))
                 result = false;
-            if (String.IsNullOrWhiteSpace(Name))
-                result = false;
-            if (String.IsNullOrWhiteSpace(Surname))
+            if (String.IsNullOrWhiteSpace(FirstName))
                 result = false;
             if (String.IsNullOrWhiteSpace(Email))
+                result = false;
+            if (String.IsNullOrWhiteSpace(Login))
                 result = false;
             return result;
         }
 
-        public string Show()
+        public void AddWallet(string name, decimal startingBalance, string description, Currency mainCurrency)
         {
-            return $"User {_id}: {_name}, {_surname}, Email: {_email}";
+            var newWallet = new Wallet(Guid, name, startingBalance, description, mainCurrency,
+                new ObservableCollection<Transaction>(), new ObservableCollection<Category>(), new List<Guid>());
+            Wallets.Add(newWallet);
+        }
+        public void AddCategory(string name, string description, ColorWrapper colorWrapper, Icon icon)
+        {
+            if (!Categories.Exists(x => x.Name == name && x.Description == description))
+            {
+                var newCategory = new Category(Guid, name, description, colorWrapper, icon, Guid.NewGuid());
+                Categories.Add(newCategory);
+            }
+        }
+        public void ShareWallet(User user, Wallet wallet)
+        {
+            if (wallet.OwnerGuid == Guid && Guid != user.Guid)
+            {
+                if (!wallet.CoOwnersGuid.Exists(x => x == user.Guid))
+                {
+                    wallet.CoOwnersGuid.Add(user.Guid);
+                    user.WalletsCoOwnered.Add(wallet);
+                }
+            }
+        }
+        public override string ToString()
+        {
+            return FullName;
+        }
+        public void AddWalletCategory(Wallet wallet, Category category)
+        {
+            if (wallet.OwnerGuid == Guid)
+            {
+                if (category.UserGuid == Guid)
+                {
+                    if (!wallet.Categories.ToList().Exists(x => x.Name == category.Name && x.Description == category.Description))
+                    {
+                        wallet.Categories.Add(category);
+                    }
+                }
+            }
         }
     }
-//    , Wallets: {_wallets
-//}, on categories: { _categories}
+
 }

@@ -1,14 +1,14 @@
 ﻿
 using System.Collections.ObjectModel;
-using BudgetsWPF.Authentication;
+using System.ComponentModel;
 using BudgetsWPF.Navigation;
-using Models.Wallets;
+using Prism.Commands;
 using Prism.Mvvm;
 using Services;
 
 namespace BudgetsWPF.Wallets
 {
-    public class WalletsViewModel:BindableBase, INavigatable<MainNavTypes>
+    public class WalletsViewModel:BindableBase,INotifyPropertyChanged, INavigatable<MainNavTypes>
     {
         private WalletService _service;
         private WalletDetailsViewModel _currentWallet;
@@ -34,6 +34,7 @@ namespace BudgetsWPF.Wallets
 
         public WalletsViewModel()
         {
+            //AddWalletCommand = new DelegateCommand(AddWallet);
             _service = new WalletService();
             Wallets = new ObservableCollection<WalletDetailsViewModel>();
             foreach (var wallet in _service.GetWallets())
@@ -41,6 +42,14 @@ namespace BudgetsWPF.Wallets
                 Wallets.Add(new WalletDetailsViewModel(wallet));
             }
         }
+
+        private void AddWallet()
+        {
+            var wallService = new WalletService();
+            wallService.JustAdd();
+
+        }
+        public DelegateCommand AddWalletCommand { get; }
         public void ClearSensitiveData()
         {
             
