@@ -1,18 +1,23 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using System.Windows;
 using BudgetsWPF.Navigation;
+using lab1_1;
 using Models.Users;
 using Prism.Commands;
 using Services;
 
 namespace BudgetsWPF.Authentication
 {
-    public class SignUpViewModel:INotifyPropertyChanged, INavigatable<AuthNavTypes>
+    public class SignUpViewModel : INotifyPropertyChanged, INavigatable<AuthNavTypes>
     {
-        private RegistrationUser _regUser= new RegistrationUser();
-        private Action _goToSignIn;
+        private RegistrationUser _regUser = new RegistrationUser();
+        private Action _gotoSignIn;
+        private bool _isEnabled = true;
+
+
         public AuthNavTypes Type
         {
             get
@@ -21,93 +26,165 @@ namespace BudgetsWPF.Authentication
             }
         }
 
-
-        public SignUpViewModel(Action goToSignIn)
+        public bool IsEnabled
         {
-            SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnable);
-            CloseCommand = new DelegateCommand(() => Environment.Exit(0));
-            _goToSignIn = goToSignIn;
-            SignInCommand = new DelegateCommand(goToSignIn);
+            get
+            {
+                return _isEnabled;
+            }
+            set
+            {
+                _isEnabled = value;
+                OnPropertyChanged();
+            }
         }
 
-        private bool IsSignUpEnable()
-        {
-            return !string.IsNullOrWhiteSpace(Login) && !string.IsNullOrWhiteSpace(Password) && !string.IsNullOrWhiteSpace(LastName);
-        }
-
-        private async void SignUp()
-        {
-
-
-
-            var authService = new AuthenticationService();
-                try
-                {
-                     await authService.RegisterUser(_regUser);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Fail: {ex.Message}");
-                    return;
-                }
-                MessageBox.Show("User successfully registered, please sign in");
-                _goToSignIn.Invoke();
-                //Todo navigate to main view of app
-            
-        }
 
         public string Login
         {
-            get { return _regUser.Login; }
+            get
+            {
+                return _regUser.Login;
+            }
             set
             {
                 if (_regUser.Login != value)
                 {
                     _regUser.Login = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Login));
                     SignUpCommand.RaiseCanExecuteChanged();
                 }
+
             }
         }
+
         public string Password
         {
-            get { return _regUser.Password; }
-            set {
+            get
+            {
+                return _regUser.Password;
+            }
+            set
+            {
                 if (_regUser.Password != value)
                 {
                     _regUser.Password = value;
-                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(Password));
                     SignUpCommand.RaiseCanExecuteChanged();
                 }
             }
         }
+
+
         public string LastName
         {
-            get { return _regUser.LastName; }
+            get
+            {
+                return _regUser.LastName;
+            }
             set
             {
                 if (_regUser.LastName != value)
                 {
-                    _regUser.LastName= value;
-                    OnPropertyChanged();
+                    _regUser.LastName = value;
+                    OnPropertyChanged(nameof(LastName));
                     SignUpCommand.RaiseCanExecuteChanged();
                 }
             }
         }
 
-        public DelegateCommand SignUpCommand{ get; }
+        public string FirstName
+        {
+            get
+            {
+                return _regUser.FirstName;
+            }
+            set
+            {
+                if (_regUser.FirstName != value)
+                {
+                    _regUser.FirstName = value;
+                    OnPropertyChanged(nameof(FirstName));
+                    SignUpCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+        public string Email
+        {
+            get
+            {
+                return _regUser.Email;
+            }
+            set
+            {
+                if (_regUser.Email != value)
+                {
+                    _regUser.Email = value;
+                    OnPropertyChanged(nameof(Email));
+                    SignUpCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+
+
+        public DelegateCommand SignUpCommand { get; }
         public DelegateCommand CloseCommand { get; }
         public DelegateCommand SignInCommand { get; }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public SignUpViewModel(Action gotoSignIn)
+        {
+            SignUpCommand = new DelegateCommand(SignUp, IsSignUpEnabled);
+            CloseCommand = new DelegateCommand(() => Environment.Exit(0));
+            _gotoSignIn = gotoSignIn;
+            SignInCommand = new DelegateCommand(_gotoSignIn);
+        }
+
+        private bool IsSignUpEnabled()
+        {
+
+            return !String.IsNullOrWhiteSpace(Login) && !String.IsNullOrWhiteSpace(Password) && !String.IsNullOrWhiteSpace(LastName) && !String.IsNullOrWhiteSpace(FirstName) && !String.IsNullOrWhiteSpace(Email);
+        }
+
+        private async void SignUp()
+        {
+            var authService = new AuthenticationService();
+            User user = null;
+            try
+            {
+                IsEnabled = false;
+                await Task.Run(() => authService.RegistrateUser(_regUser));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Sign up failed {ex.Message}");
+                return;
+            }
+            finally // is done independently from exception
+            {
+                IsEnabled = true;
+            }
+            MessageBox.Show("User successfully registered, please Sign In.");
+            _gotoSignIn.Invoke();
+
+
+        }
+
+
+
+        public void ClearSensitiveData()
+        {
+            _regUser = new RegistrationUser();
+        }
+
+
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-        public void ClearSensitiveData()
-        {
-            _regUser = new RegistrationUser();
         }
     }
 }

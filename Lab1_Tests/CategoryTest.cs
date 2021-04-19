@@ -9,18 +9,18 @@ namespace Lab1_Tests
 {
     public class CategoryTest
     {
-        [Fact]
-        public void Test1()
-        {
+      //  [Fact]
+       // public void Test1()
+      //  {
             //Arrange
-            var category = new Category() { Name = "travelling", Color = "red", Description = "mmmmmm" };
+          //  var category = new Category() { Name = "travelling", Color = "red", Description = "mmmmmm" };
 
 
             //Act
-            var actual = category.Validate();
+         //   var actual = category.Validate();
 
             //Assert
-            Assert.True(actual);
-        }
-    }
+          //  Assert.True(actual);
+      //  }
+  }
 }

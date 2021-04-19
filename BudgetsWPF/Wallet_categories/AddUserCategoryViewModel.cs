@@ -8,10 +8,13 @@ using System.Windows;
 using Prism.Commands;
 using Prism.Mvvm;
 using BudgetsWPF.Navigation;
+using lab1_1;
+using Services;
+using System.IO;
 
 namespace BudgetsWPF.Wallet_categories
 {
-    public class AddUserCategoryViewModel : BindableBase, INavigatable<MainNavigatableTypes>
+    public class AddUserCategoryViewModel : BindableBase, INavigatable<MainNavTypes>
     {
 
         private CategoryService _service;
@@ -74,7 +77,7 @@ namespace BudgetsWPF.Wallet_categories
             }
         }
 
-        public System.Drawing.Icon Image
+        public FileStream Image
         {
             get
             {
@@ -86,11 +89,11 @@ namespace BudgetsWPF.Wallet_categories
                 RaisePropertyChanged(nameof(Image));
             }
         }
-        public MainNavigatableTypes Type
+        public MainNavTypes Type
         {
             get
             {
-                return MainNavigatableTypes.AddCategory;
+                return MainNavTypes.AddCategory;
             }
         }
 

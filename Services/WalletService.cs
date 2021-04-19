@@ -2,48 +2,44 @@
 using System.Threading;
 using System.Threading.Tasks;
 using DataStorage;
-using Models.Wallets;
+using lab1_1;
+
 
 namespace Services
 {
     public class WalletService
     {
-    //    public static List<Wallet> Wallets = new List<Wallet>()
+        private FileDataStorage<Wallet> _storage = new FileDataStorage<Wallet>();
 
-    //        {
-    //            new Wallet(new Guid(), "wal1", 57.05m) ,
-    //            new Wallet(new Guid(), "wal2", 57.05m),
-    //            new Wallet(new Guid(), "wal3", 57.05m),
-    //            new Wallet(new Guid(), "wal4", 57.05m) ,
-    //            new Wallet(new Guid(), "wal5", 57.05m) 
-    //};
 
-    public FileDataStorage<Wallet> _storage = new();
-        
-        
 
-        public async Task<bool> AddOrUpdateWalletAsync(Wallet newW)
+        public async Task<bool> AddOrUpdateWalletAsync(Wallet wallet)
         {
             Thread.Sleep(1000);
-
-            await Task.Run(() => _storage.AddOrUpdate(newW));
+            await Task.Run(() => _storage.AddOrUpdateAsync(wallet));
             return true;
         }
-        public void DeleteWallet(Wallet newW)
+
+
+        public void DeleteWallet(Wallet wallet)
         {
             Thread.Sleep(1000);
-            _storage.Delete(newW);
+            _storage.Delete(wallet);
         }
-        public Wallet GetWallet(Wallet newW)
+
+        public Wallet GetWallet(Wallet wallet)
         {
-            Task<Wallet> result = Task.Run < Wallet > (async () => await _storage.GetAsync(newW.Guid));
-            return result.Result;
+            Task<Wallet> walresult = Task.Run<Wallet>(async () => await _storage.GetAsync(wallet.Guid));
+            return walresult.Result;
         }
+
+
         public List<Wallet> GetWallets()
         {
-            Task<List<Wallet>> result = Task.Run<List<Wallet>>(async () => await _storage.GetAllAsync());
-            return result.Result;
+            Task<List<Wallet>> wallets = Task.Run<List<Wallet>>(async () => await _storage.GetAllAsync());
+            return wallets.Result;
         }
+
     }
 
 }

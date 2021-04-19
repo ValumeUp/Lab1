@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace DataStorage
 {
-    public class FileDataStorage<TObject> where TObject:class, IStorable
+    public class FileDataStorage<TObject> where TObject : class, IStorable
     {
-        private static readonly string BaseFolder =
-            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "BudgetsStorage", typeof(TObject).Name);
+        private static readonly string BaseFolder = Path.Combine(Environment.GetFolderPath
+            (Environment.SpecialFolder.ApplicationData), "BudgetsStorage", typeof(TObject).Name);
 
         public FileDataStorage()
         {
@@ -20,55 +21,71 @@ namespace DataStorage
             }
         }
 
-        public async Task AddOrUpdate(TObject obj)
-            {
-                string stringObject = JsonSerializer.Serialize(obj);
 
-                string filePath = Path.Combine(BaseFolder, obj.Guid.ToString("N"));
-                using (StreamWriter sw=new StreamWriter(filePath, false))
-                {
-                   await sw.WriteAsync(stringObject);
-                }
-            }
-
-        public async Task<TObject> GetAsync(Guid guid)
+        public async Task AddOrUpdateAsync(TObject obj)
         {
-            string stringObject = null;
-            string filePath = Path.Combine(BaseFolder, guid.ToString("N"));
-            if (!File.Exists(filePath))
-                return null;
+            string stringObject = JsonConvert.SerializeObject(obj);
 
-            using (StreamReader sr=new StreamReader(filePath))
+            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
+
+            using (StreamWriter sw = new StreamWriter(filePath, false))//false to overwrite the file every time
             {
-                stringObject = await sr.ReadToEndAsync();
+                await sw.WriteAsync(stringObject);
             }
 
-            return JsonSerializer.Deserialize<TObject>(stringObject);
         }
-        public async Task<List<TObject>> GetAllAsync()
-        {
-            var result = new List<TObject>();
-            foreach (var  file in Directory.EnumerateFiles(BaseFolder))
-            {
-                string stringObject = null;
-                
 
-                using (StreamReader sr = new StreamReader(file))
-                {
-                    stringObject = await sr.ReadToEndAsync();
-                }
-
-                result.Add( JsonSerializer.Deserialize<TObject>(stringObject)); 
-            }
-
-            return result;
-        }
         public void Delete(TObject obj)
         {
             string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
 
             File.Delete(filePath);
         }
+
+
+
+        public async Task<TObject> GetAsync(Guid guid)
+        {
+            string stringObject = null;
+
+            string filePath = Path.Combine(BaseFolder, guid.ToString(format: "N"));
+            if (!File.Exists(filePath))
+            {
+                return null;
+            }
+
+            using (StreamReader sr = new StreamReader(filePath))
+            {
+                stringObject = await sr.ReadToEndAsync();
+            }
+
+
+            return JsonConvert.DeserializeObject<TObject>(stringObject);
+        }
+
+
+        public async Task<List<TObject>> GetAllAsync()
+        {
+            var res = new List<TObject>();
+
+
+            foreach (var file in Directory.EnumerateFiles(BaseFolder))
+            {
+                string stringObject = null;
+
+
+                using (StreamReader sr = new StreamReader(file))
+                {
+                    stringObject = await sr.ReadToEndAsync();
+                }
+
+                res.Add(JsonConvert.DeserializeObject<TObject>(stringObject));
+            }
+
+            return res;
+        }
+
+
 
     }
 }

@@ -9,7 +9,7 @@ using lab1_1;
 
 namespace Services
 {
-    class CategoryService
+    public class CategoryService
     {
         private FileDataStorage<Category> _storage = new FileDataStorage<Category>();
 
@@ -18,7 +18,7 @@ namespace Services
         public async Task<bool> AddOrUpdateCategoryAsync(Category category)
         {
             Thread.Sleep(1000);
-            await Task.Run(() => _storage.AddOrUpdate(category));
+            await Task.Run(() => _storage.AddOrUpdateAsync(category));
             return true;
         }
 
@@ -35,5 +35,6 @@ namespace Services
             Task<List<Category>> categories = Task.Run<List<Category>>(async () => await _storage.GetAllAsync());
             return categories.Result;
         }
+
     }
 }

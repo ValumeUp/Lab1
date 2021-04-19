@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 
 namespace lab1_1
@@ -58,7 +59,7 @@ namespace lab1_1
                 return result;
             }
         }
-        public bool Validate()
+        public override bool  Validate()
         {
             var result = true;
 
@@ -79,7 +80,7 @@ namespace lab1_1
                 new ObservableCollection<Transaction>(), new ObservableCollection<Category>(), new List<Guid>());
             Wallets.Add(newWallet);
         }
-        public void AddCategory(string name, string description, ColorWrapper colorWrapper, Icon icon)
+        public void AddCategory(string name, string description, ColorWrapper colorWrapper, FileStream icon)
         {
             if (!Categories.Exists(x => x.Name == name && x.Description == description))
             {

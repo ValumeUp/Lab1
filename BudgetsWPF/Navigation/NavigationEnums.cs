@@ -1,12 +1,12 @@
 ﻿namespace BudgetsWPF.Navigation
 {
-    public enum AuthNavigatableTypes
+    public enum AuthNavTypes
     {
         SignIn,
         SignUp
     }
 
-    public enum MainNavigatableTypes
+    public enum MainNavTypes
     {
         Auth,
         Wallets,

@@ -9,10 +9,12 @@ using Prism.Commands;
 using Prism.Mvvm;
 using BudgetsWPF.Wallets;
 using BudgetsWPF.Navigation;
+using lab1_1;
+using Services;
 
 namespace BudgetsWPF.Wallet_categories
 {
-    public class DeleteUserCategoryViewModel : BindableBase, INavigatable<MainNavigatableTypes>
+    public class DeleteUserCategoryViewModel : BindableBase, INavigatable<MainNavTypes>
     {
         private WalletService _walService;
         private CategoryService _catService;
@@ -115,11 +117,11 @@ namespace BudgetsWPF.Wallet_categories
         }
 
 
-        public MainNavigatableTypes Type
+        public MainNavTypes Type
         {
             get
             {
-                return MainNavigatableTypes.DeleteCategory;
+                return MainNavTypes.DeleteCategory;
             }
         }
 

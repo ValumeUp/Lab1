@@ -7,23 +7,26 @@ using DataStorage;
 namespace lab1_1
 {
     public class Wallet : EntityBase, IStorable
+
     {
-        private static int InstanceCount;
+        private static int _instanceCountWallets = 0;
+
         private Guid _guid;
         private string _name;
-        private decimal _initialBalance;
+        private decimal _InitialBalance;
         private string _description;
         private Currency? _currency;
-        private decimal _balance;
-        private ObservableCollection<Transaction> _categories;
         private ObservableCollection<Transaction> _transactions;
-        private List<Guid> _coOwnersGuid;
-        private Guid _ownerGuid;
+        private ObservableCollection<Category> _categories;
+        private decimal _balance;
 
-        public Guid OwnerGuid
+        private Guid _ownerGuid;
+        private List<Guid> _coOwnersGuid;
+
+        public Guid Guid
         {
-            get => _ownerGuid;
-            set => _ownerGuid = value;
+            get => _guid;
+            set => _guid = value;
         }
 
         public string Name
@@ -32,16 +35,10 @@ namespace lab1_1
             set => _name = value;
         }
 
-        public Guid Guid
+        public decimal StartingBalance
         {
-            get => _guid;
-            set => _guid = value;
-        }
-
-        public decimal InitialBalance
-        {
-            get => _initialBalance;
-            set => _initialBalance = value;
+            get => _InitialBalance;
+            private set => _InitialBalance = value;
         }
 
         public string Description
@@ -50,24 +47,26 @@ namespace lab1_1
             set => _description = value;
         }
 
-        public Currency? Currency
+        public Currency? MainCurrency
         {
             get => _currency;
             set => _currency = value;
         }
 
+        public ObservableCollection<Transaction> Transactions
+        {
+            get
+            {
+                return _transactions;
+            }
+            set => _transactions = value;
+        }
 
 
-        public ObservableCollection<Transaction> Categories
+        public ObservableCollection<Category> Categories
         {
             get => _categories;
             set => _categories = value;
-        }
-
-        public ObservableCollection<Transaction> Transactions
-        {
-            get => _transactions;
-            set => _transactions = value;
         }
 
         public decimal Balance
@@ -76,125 +75,151 @@ namespace lab1_1
             set => _balance = value;
         }
 
+        public Guid OwnerGuid
+        {
+            get => _ownerGuid;
+            set => _ownerGuid = value;
+        }
+
         public List<Guid> CoOwnersGuid
         {
             get => _coOwnersGuid;
         }
 
-        public Wallet(Guid ownerGuid, string name, decimal startingBalance, string description, Currency? mainCurrency,
-            ObservableCollection<Transaction> transactions,
+        public Wallet(Guid ownerGuid, string name, decimal startingBalance, string description, Currency? mainCurrency, ObservableCollection<Transaction> transactions,
             ObservableCollection<Category> categories, List<Guid> coOwnersGuid)
         {
             _guid = Guid.NewGuid();
             _ownerGuid = ownerGuid;
             _name = name;
-            _initialBalance = startingBalance;
+            _InitialBalance = startingBalance;
             _description = description;
             _currency = mainCurrency;
             _balance = startingBalance;
             _transactions = transactions;
             _categories = categories;
             _coOwnersGuid = coOwnersGuid;
+         
         }
-
-        public void addTransaction(User user, Transaction transaction)
+        public void AddTransaction(User user, Transaction transaction)
         {
             if (OwnerGuid == user.Guid || CoOwnersGuid.Exists(x => x == user.Guid))
             {
                 if (transaction.Category.UserGuid == OwnerGuid)
                 {
-                    Balance += transaction.MoneyAmount *
-                               Converter.СomputeTheCoefficient(transaction.Currency, Currency);
-                    var newTransaction = new Transaction(Guid, transaction.MoneyAmount, transaction.Currency,
-                        transaction.Category,
+                    Balance += transaction.MoneyAmount * Converter.СomputeTheCoefficient(transaction.Currency, MainCurrency);
+                    var newTransaction = new Transaction(Guid, transaction.MoneyAmount, transaction.Currency, transaction.Category,
                         transaction.Description, transaction.Date, transaction.Guid);
                     var temp = Transactions;
                     temp.Add(newTransaction);
                     Transactions = temp;
                 }
             }
+
+            return;
         }
 
-        public void deleteTransaction(User user, Transaction transaction)
+        public void EditTransaction(User user, Transaction uneditedTransaction)
+        {
+            if (OwnerGuid == user.Guid && uneditedTransaction.Category.UserGuid == user.Guid)
             {
-                if (OwnerGuid == user.Guid)
-                {
-                    foreach (Transaction listTransaction in Transactions)
-                    {
-                        if (listTransaction.Guid == uneditedTransaction.Guid)
-                        {
-                            Balance -= uneditedTransaction.MoneyAmount *
-                                       Converter.СomputeTheCoefficient(uneditedTransaction.Currency, MainCurrency);
-                            var temp = Transactions;
-                            temp.Remove(listTransaction);
-                            Transactions = temp;
-                            return;
-                        }
-                    }
-                }
-            }
-
-            
-
-        
-            public decimal LastMonthIncome()
-            {
-                return LastMonth(true);
-            }
-
-            public decimal LastMonthExpense()
-            {
-                return LastMonth(false);
-            }
-
-            private decimal LastMonth(bool positive)
-            {
-                decimal result = 0.0m;
-                DateTime currentDate = DateTime.Now;
-
                 foreach (Transaction listTransaction in Transactions)
                 {
-                    if (DateTime.Compare(listTransaction.Date.Value.AddMonths(1), currentDate) > 0)
+                    if (listTransaction.Guid == uneditedTransaction.Guid)
                     {
-                        if ((listTransaction.MoneyAmount > 0 && positive) ||
-                            (listTransaction.MoneyAmount < 0 && !positive))
-                        {
-                            result += listTransaction.MoneyAmount *
-                                      Converter.СomputeTheCoefficient(listTransaction.Currency, Currency);
-                        }
+                        Balance -= uneditedTransaction.MoneyAmount *
+                                   Converter.СomputeTheCoefficient(uneditedTransaction.Currency, MainCurrency);
+
+                     
+                        Balance += listTransaction.MoneyAmount *
+                                   Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
+                        return;
                     }
                 }
-
-                return result;
             }
 
+            return;
+        }
 
-            public ObservableCollection<Transaction> ShowTenTransactions(int number)
+        public void DeleteTransaction(User user, Transaction uneditedTransaction)
+        {
+            if (OwnerGuid == user.Guid)
             {
-                _transactions = new ObservableCollection<Transaction>(_transactions.OrderBy((x => x.Date)).ToList());
-
-
-                ObservableCollection<Transaction> result = new ObservableCollection<Transaction>();
-                int transactionsShown = 10;
-
-                if (number + transactionsShown > Transactions.Count)
+                foreach (Transaction listTransaction in Transactions)
                 {
-                    number = Transactions.Count - transactionsShown;
+                    if (listTransaction.Guid == uneditedTransaction.Guid)
+                    {
+                        Balance -= uneditedTransaction.MoneyAmount *
+                                   Converter.СomputeTheCoefficient(uneditedTransaction.Currency, MainCurrency);
+                        var temp = Transactions;
+                        temp.Remove(listTransaction);
+                        Transactions = temp;
+                        return;
+                    }
                 }
-
-                if (transactionsShown > Transactions.Count)
-                {
-                    number = 0;
-                    transactionsShown = Transactions.Count;
-                }
-
-                for (int i = number; i < number + transactionsShown; i++)
-                {
-                    result.Add(Transactions[i]);
-                }
-
-                return result;
             }
+
+            return;
+        }
+
+
+        public decimal LastMonthIncome()
+        {
+            return LastMonth(true);
+        }
+
+        public decimal LastMonthExpense()
+        {
+            return LastMonth(false);
+        }
+
+        private decimal LastMonth(bool positive)
+        {
+            decimal result = 0.0m;
+            DateTime currentDate = DateTime.Now;
+
+            foreach (Transaction listTransaction in Transactions)
+            {
+                if (DateTime.Compare(listTransaction.Date.Value.AddMonths(1), currentDate) > 0)
+                {
+                    if ((listTransaction.MoneyAmount > 0 && positive) || (listTransaction.MoneyAmount < 0 && !positive))
+                    {
+                        result += listTransaction.MoneyAmount *
+                                  Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+        public ObservableCollection<Transaction> ShowTenTransactions(int number)
+        {
+            _transactions = new ObservableCollection<Transaction>(_transactions.OrderBy((x => x.Date)).ToList());
+
+
+            ObservableCollection<Transaction> result = new ObservableCollection<Transaction>();
+            int transactionsShown = 10;
+
+            if (number + transactionsShown > Transactions.Count)
+            {
+                number = Transactions.Count - transactionsShown;
+            }
+
+            if (transactionsShown > Transactions.Count)
+            {
+                number = 0;
+                transactionsShown = Transactions.Count;
+            }
+
+            for (int i = number; i < number + transactionsShown; i++)
+            {
+                result.Add(Transactions[i]);
+            }
+
+            return result;
+        }
 
         public override bool Validate()
         {
@@ -204,15 +229,25 @@ namespace lab1_1
                 result = false;
             if (String.IsNullOrWhiteSpace(Name))
                 result = false;
-            if (InitialBalance < 0)
+            if (StartingBalance < 0)
                 result = false;
-            if (Currency == null)
+            if (MainCurrency == null)
             {
                 result = false;
             }
 
             return result;
         }
+
+
+
+
+
+
+
+
+
+
     }
 }
 
