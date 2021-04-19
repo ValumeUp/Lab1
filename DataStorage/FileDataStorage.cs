@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -63,6 +63,13 @@ namespace DataStorage
 
             return result;
         }
+        public void Delete(TObject obj)
+        {
+            string filePath = Path.Combine(BaseFolder, obj.Guid.ToString(format: "N"));
+
+            File.Delete(filePath);
+        }
+
     }
-    }
+}
 

@@ -1,5 +1,4 @@
-﻿
-using Models.Wallets;
+﻿using Models.Wallets;
 using Prism.Mvvm;
 
 namespace BudgetsWPF.Wallets

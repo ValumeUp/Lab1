@@ -25,5 +25,6 @@
         </ListView>
        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"></GridSplitter>
         <ContentControl Grid.Column="2" Content="{Binding CurrentWallet}"></ContentControl>
+<Button Height="50" VerticalAlignment="Bottom" Command="{Binding AddWalletCommand}">Add wallet</Button>
     </Grid>
 </UserControl>
