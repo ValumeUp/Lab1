@@ -16,7 +16,7 @@ namespace lab1_1
         private string _name;
         private string _description;
         private ColorWrapper _colorWrapper;
-        private System.Drawing.Icon _image;
+        private FileStream _image;
         private Guid _userGuid;
 
 
@@ -26,9 +26,9 @@ namespace lab1_1
         public Guid UserGuid { get => _userGuid; private set => _userGuid = value; }
 
         public ColorWrapper ColorWrapper { get => _colorWrapper; set => _colorWrapper = value; }
-        public Icon Image { get => _image; set => _image = value; }
+        public FileStream Image { get => _image; set => _image = value; }
 
-        public Category(Guid userGuid, string name, string description, ColorWrapper colorWrapper, Icon image, Guid guid)
+        public Category(Guid userGuid, string name, string description, ColorWrapper colorWrapper, FileStream image, Guid guid)
         {
             _guid = guid;
             _userGuid = userGuid;
