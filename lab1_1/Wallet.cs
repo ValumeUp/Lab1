@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Net.Http.Headers;
-using System.Runtime.InteropServices;
-using System.Text;
+using System.Linq;
 using DataStorage;
 
 namespace lab1_1
@@ -99,24 +97,6 @@ namespace lab1_1
             _coOwnersGuid = coOwnersGuid;
         }
 
-        public bool Validate()
-        {
-            var result = true;
-
-            if (Id <= 0)
-                result = false;
-            if (String.IsNullOrWhiteSpace(Name))
-                result = false;
-            if (String.IsNullOrWhiteSpace(Description))
-                result = false;
-            if (String.IsNullOrWhiteSpace(Currency))
-                result = false;
-            if (UserId <= 0)
-                result = false;
-
-            return result;
-        }
-
         public void addTransaction(User user, Transaction transaction)
         {
             if (OwnerGuid == user.Guid || CoOwnersGuid.Exists(x => x == user.Guid))
@@ -124,7 +104,7 @@ namespace lab1_1
                 if (transaction.Category.UserGuid == OwnerGuid)
                 {
                     Balance += transaction.MoneyAmount *
-                               Converter.СomputeTheCoefficient(transaction.Currency, MainCurrency);
+                               Converter.СomputeTheCoefficient(transaction.Currency, Currency);
                     var newTransaction = new Transaction(Guid, transaction.MoneyAmount, transaction.Currency,
                         transaction.Category,
                         transaction.Description, transaction.Date, transaction.Guid);
@@ -135,7 +115,7 @@ namespace lab1_1
             }
         }
 
-        public void deleteTransaction(Transaction transaction)
+        public void deleteTransaction(User user, Transaction transaction)
             {
                 if (OwnerGuid == user.Guid)
                 {
@@ -154,51 +134,9 @@ namespace lab1_1
                 }
             }
 
-            public decimal countBalance()
-            {
-                var result = _initialBalance;
-                foreach (var transaction in Transactions)
-                {
-                    //result += transaction.Sum;
-                    result = Decimal.Add(result, transaction.Sum);
-                }
+            
 
-                return result;
-            }
-
-            public decimal countMonthTransactions()
-            {
-                decimal result = 0;
-                DateTime dt = DateTime.Now;
-                foreach (var transaction in Transactions)
-                {
-                    if (transaction.Date > dt && transaction.Sum >= 0)
-                    {
-                        result += transaction.Sum;
-                    }
-                }
-
-                return result;
-
-            }
-
-            public decimal countMonthTransactionsMinus()
-            {
-                decimal result = 0;
-                DateTime dt = DateTime.Now;
-                foreach (var transaction in Transactions)
-                {
-                    if (transaction.Date > dt && transaction.Sum < 0)
-                    {
-                        result = Decimal.Add(result, transaction.Sum);
-                        //result += transaction.Sum;
-                    }
-                }
-
-                return result;
-
-            }
-
+        
             public decimal LastMonthIncome()
             {
                 return LastMonth(true);
@@ -222,7 +160,7 @@ namespace lab1_1
                             (listTransaction.MoneyAmount < 0 && !positive))
                         {
                             result += listTransaction.MoneyAmount *
-                                      Converter.СomputeTheCoefficient(listTransaction.Currency, MainCurrency);
+                                      Converter.СomputeTheCoefficient(listTransaction.Currency, Currency);
                         }
                     }
                 }
