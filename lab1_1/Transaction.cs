@@ -1,66 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Text;
+using DataStorage;
 
 namespace lab1_1
 {
-    public class Transaction: BooleansBase
+    public class Transaction: EntityBase, IStorable
     {
-        private static int InstanceCount;
-        private int _id;
-        private decimal _sum;
+        private Guid _guid;
+        private decimal _moneyAmount;
         private Category _category;
-        private string _currency;
+        private Currency? _currency;
         private string _description;
-        private DateTime _date;
+        private DateTime? _date;
         private FileStream _file;
-        private int _userId;
+        private Guid _walletGuid;
 
 
-        public static int InstanceCount1 { get => InstanceCount; set => InstanceCount = value; }
-        public int Id { get => _id; set => _id = value; }
-        public decimal Sum { 
-            get {
-                return  _sum; 
-            }
-            set { _sum = value; 
-                HasChanges = true;
-            } 
+        public Guid Guid { get => _guid; set => _guid = value; }
+        public decimal MoneyAmount { get => _moneyAmount; set => _moneyAmount = value; }
+
+        public Category Category {
+        get => _category; set => _category = value;
+    }
+
+        public Currency? Currency
+        {
+            get => _currency;
+            set => _currency = value;
         }
-        public Category Category { 
-            get { 
-                return _category; 
-            }
-            set { 
-                _category = value;
-                HasChanges = true;
-            } 
+
+        public string Description
+        {
+            get => _description;
+            set => _description = value;
         }
-        public string Currency { 
-            get { 
-                return _currency; 
-            }
-            set {
-                _currency = value;
-                HasChanges = true;
-            } 
-        }
-        public string Description { get { 
-                return _description; 
-            } 
-            set {
-                _description = value;
-                HasChanges = true;
-            }
-        }
-        public DateTime Date { 
-            get { 
-                return _date; 
-            }
-            set { _date = value;
-                HasChanges = true;
-            }
+
+        public DateTime? Date {
+            get => _date; set => _date = value;
         }
         public FileStream File { get 
             {
@@ -68,48 +47,37 @@ namespace lab1_1
             } 
             set { 
                 _file = value;
-                HasChanges = true;
             } 
         }
 
-        public int UserId {
-            get
-            {
-               return _userId;
-            }
-            set
-            {
-                _userId = value;
-                HasChanges = true;
-            }
-        }
+        public Guid WalletGuid { get => _walletGuid; private set => _walletGuid = value; }
 
-        public void DeleteTransaction()
-        {
-            this._currency = null;
-            this._category = null;
-            this._sum = 0;
-            this._description = null;
-            this._date = default;
-            this._description = null;
-            this._file = null;
 
-        }
+        public override bool Validate()
+        {
+            var result = true;
 
-        public Transaction()
-        {
-            InstanceCount += 1;
-            _id = InstanceCount;
+            if (WalletGuid == Guid.Empty)
+                result = false;
+            if (Currency == null)
+                result = false;
+            if (Category == null)
+                result = false;
+            if (MoneyAmount == 0)
+                result = false;
+
+            return result;
         }
-        public Transaction(int id, decimal sum, Category category, string currency, string description, DateTime date, FileStream file)
+        public Transaction(Guid walletGuid, decimal moneyAmount, Currency? currency, Category category, string description, /*List<string> files,*/DateTime? date, Guid guid)
         {
-            _id = id;
-            _sum = sum;
+            _guid = guid;
+
+            _walletGuid = walletGuid;
+            _moneyAmount = moneyAmount;
             _category = category;
             _currency = currency;
             _description = description;
             _date = date;
-            _file = file;
         }
     }
 }
