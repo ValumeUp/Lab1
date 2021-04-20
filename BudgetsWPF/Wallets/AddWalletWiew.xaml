@@ -11,6 +11,9 @@
         <StackPanel>
 
             <Grid>
+                <Grid.Background>
+                    <ImageBrush ImageSource="night.jpg"></ImageBrush>
+                </Grid.Background>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -24,19 +27,19 @@
 
 
                 <StackPanel Grid.Row="0" Grid.Column="0">
-                    <TextBlock Margin=" 10,10,10,5">Name:</TextBlock>
+                    <TextBlock Foreground="White" Margin=" 10,10,10,5">Name:</TextBlock>
                     <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Name}"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0">
-                    <TextBlock Margin=" 10,10,10,5">Description:</TextBlock>
+                    <TextBlock Foreground="White" Margin=" 10,10,10,5">Description:</TextBlock>
                     <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Description}"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="2" Grid.Column="0">
-                    <TextBlock Margin=" 10,10,10,5">Starting Balance:</TextBlock>
+                    <TextBlock Foreground="White" Margin=" 10,10,10,5">Balance:</TextBlock>
                     <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Balance}"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Row="3" Grid.Column="0">
-                    <TextBlock Margin=" 10,10,10,5">Main currency:</TextBlock>
+                    <TextBlock Foreground="White" Margin=" 10,10,10,5">Currency:</TextBlock>
                     <ComboBox Name="CurrencyList" SelectedIndex="0"  Text="{Binding MainCurrency}" Margin=" 10,0,10,15"  VerticalAlignment="Top">
                         <TextBlock>USD</TextBlock>
                         <TextBlock>EUR</TextBlock>

@@ -8,6 +8,9 @@
 
   <ItemGroup>
     <None Remove="base.png" />
+    <None Remove="large.png" />
+    <None Remove="Wallets\night.jpg" />
+    <None Remove="Wallets\second.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,6 +24,9 @@
 
   <ItemGroup>
     <Resource Include="base.png" />
+    <Resource Include="Authentication\large.png" />
+    <Resource Include="Wallets\night.jpg" />
+    <Resource Include="Wallets\second.png" />
   </ItemGroup>
 
 </Project>

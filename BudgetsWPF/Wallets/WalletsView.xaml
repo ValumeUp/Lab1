@@ -13,9 +13,9 @@
     
 </UserControl.Resources>
     <Grid>
-        <Grid.Background >
+        <!--<Grid.Background >
             <ImageBrush ImageSource="large.png"></ImageBrush>
-        </Grid.Background>
+        </Grid.Background>-->
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="Auto"></RowDefinition>

@@ -8,8 +8,10 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" FontSize="18">
     <Grid>
-        
-        
+        <Grid.Background>
+            <ImageBrush ImageSource="Authentication/large.png"></ImageBrush>
+        </Grid.Background>
+
         <local:MainView ></local:MainView>
         
     </Grid>

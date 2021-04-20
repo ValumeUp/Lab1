@@ -8,8 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800" IsEnabled="{Binding IsEnabled}">
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto" >
         <StackPanel>
-
-            <Grid>
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
@@ -43,8 +42,8 @@
                     <TextBox  MinWidth="300" Margin="10" HorizontalAlignment="Stretch"  Text="{Binding Image}"></TextBox>
                 </StackPanel>
 
-                <Button Grid.Row="5" Grid.Column="0" Name="ButtonAddCategory" Command="{Binding AddUserCategoryCommand}">Add category</Button>
-                <Button Grid.Row="6" Grid.Column="0" Command="{Binding GoToWalletsViewCommand}">Back to wallets</Button>
+                <Button  Grid.Row="5" Grid.Column="0" Name="ButtonAddCategory" Command="{Binding AddUserCategoryCommand}">Add category</Button>
+                <Button Grid.Row="6" Grid.Column="0" Command="{Binding GoToWalletsViewCommand}">Go back</Button>
 
             </Grid>
         </StackPanel>
