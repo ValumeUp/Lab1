@@ -9,18 +9,38 @@ namespace Lab1_Tests
 {
     public class CategoryTest
     {
-      //  [Fact]
-       // public void Test1()
-      //  {
-            //Arrange
-          //  var category = new Category() { Name = "travelling", Color = "red", Description = "mmmmmm" };
 
+        //public Category(Guid userGuid, string name, string description, ColorWrapper colorWrapper, Icon image, Guid guid)
+        [Fact]
+        public void ValidateCategory()
+        {
+            //Arrange
+            Category cat1 = new Category(Guid.NewGuid(), "business", "description", new ColorWrapper(System.Drawing.Color.Red), null, Guid.NewGuid());
 
             //Act
-         //   var actual = category.Validate();
+            var actual = cat1.Validate();
 
             //Assert
-          //  Assert.True(actual);
-      //  }
-  }
+            Assert.True(actual);
+        }
+
+
+        [Fact]
+        public void ValidateBadName()
+        {
+            //Arrange
+            Category cat2 = new Category(Guid.NewGuid(), " ", "description", new ColorWrapper(System.Drawing.Color.Black), null, Guid.NewGuid());
+
+            //Act
+            var actual = cat2.Validate();
+
+            //Assert
+            Assert.False(actual);
+        }
+
+
+
+
+
+    }
 }
