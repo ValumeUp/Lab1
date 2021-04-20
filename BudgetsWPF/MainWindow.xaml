@@ -8,9 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800" FontSize="18">
     <Grid>
-        <Grid.Background>
-            <ImageBrush ImageSource="base.png"></ImageBrush>
-        </Grid.Background>
+        
         
         <local:MainView ></local:MainView>
         

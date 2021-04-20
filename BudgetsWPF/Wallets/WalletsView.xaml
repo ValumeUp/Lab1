@@ -13,18 +13,46 @@
     
 </UserControl.Resources>
     <Grid>
-        
-<Grid.ColumnDefinitions>
-    <ColumnDefinition MinWidth="100"></ColumnDefinition>
-    <ColumnDefinition Width="2"></ColumnDefinition>
-    <ColumnDefinition Width="3*"></ColumnDefinition>
-</Grid.ColumnDefinitions>
-        <ListView  ItemsSource="{Binding Wallets}" DisplayMemberPath="DisplayName" 
-                  SelectedItem="{Binding CurrentWallet}">
-        
+        <Grid.Background >
+            <ImageBrush ImageSource="large.png"></ImageBrush>
+        </Grid.Background>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition MinWidth="100"></ColumnDefinition>
+            <ColumnDefinition Width="2"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!--Collections-->
+        <ListView  ItemsSource="{Binding Wallets}" DisplayMemberPath="DisplayName"
+                   SelectedItem="{Binding CurrentWallet}">
         </ListView>
-       <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch"></GridSplitter>
-        <ContentControl Grid.Column="2" Content="{Binding CurrentWallet}"></ContentControl>
-<Button Height="50" VerticalAlignment="Bottom" Command="{Binding AddWalletCommand}">Add wallet</Button>
+
+
+        <GridSplitter Grid.Row="0" Grid.Column="1" HorizontalAlignment="Stretch"></GridSplitter>
+        <!--Details-->
+        <ContentControl Grid.Row="0" Grid.Column="2" Grid.RowSpan="6" Content="{Binding CurrentWallet}"></ContentControl>
+
+        <!--Add wallet-->
+        <Button Grid.Row="1" Grid.Column="0" Margin="2" Command="{Binding AddWalletCommand}">Add wallet:</Button>
+        <!--Delete wallet-->
+        <Button Grid.Row="2" Grid.Column="0" Margin="2" Command="{Binding DeleteWalletCommand}">Delete wallet:</Button>
+
+        <!--Add category-->
+        <Button Grid.Row="3" Grid.Column="0" Margin="2" Command="{Binding AddUserCategoryCommand}">Add category:</Button>
+        <!--Delete category-->
+        <Button Grid.Row="4" Grid.Column="0" Margin="2" Command="{Binding DeleteUserCategoryCommand}">Delete category:</Button>
+
+        <!--Log out-->
+        <Button Grid.Row="5" Grid.Column="0" Margin="2" Command="{Binding SignInCommand}">Log out:</Button>
+
     </Grid>
 </UserControl>
